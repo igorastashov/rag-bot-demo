@@ -3,6 +3,7 @@ import sys
 import logging
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Ensure project root is on sys.path so that 'app' package can be imported
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +21,9 @@ logger = logging.getLogger(__name__)
 from app.config import get_settings
 from app.pdf_ingestion import ingest_uploaded_pdfs
 from app.rag_pipeline import answer_question
-from app.session_manager import create_session
+from app.session_manager import create_session, get_session
+from app.vector_store import get_collection
+from app.graph_store import build_graph_for_session
 
 
 settings = get_settings()
@@ -90,6 +93,10 @@ if "chat_history" not in st.session_state:
 for msg in st.session_state["chat_history"]:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
+        # Если это сообщение содержит граф, визуализируем его
+        graph_html = msg.get("graph_html")
+        if graph_html:
+            components.html(graph_html, height=600)
 
 
 if user_input := st.chat_input("Задайте вопрос..."):
@@ -108,9 +115,40 @@ if user_input := st.chat_input("Задайте вопрос..."):
 
 st.markdown("---")
 st.subheader("3. Граф знаний (Neo4j)")
-st.markdown(
-    "Пока реализовано только обновление графа в Neo4j без визуализации в UI. "
-    "Следующим шагом добавим вывод интерактивного графа прямо под этим блоком."
-)
+
+if st.button("Построить/обновить граф знаний по текущей сессии"):
+    session_state = get_session(session_id)
+
+    # Получаем все документы (чанки) из коллекции для текущей сессии
+    collection = get_collection(session_id)
+    data = collection.get(include=["documents"])
+    pdf_chunks = data.get("documents") or []
+
+    if not session_state.messages and not pdf_chunks:
+        st.warning(
+            "Недостаточно данных для построения графа. "
+            "Добавьте сообщения в чат или загрузите документы."
+        )
+    else:
+        with st.spinner("Строю граф знаний на основе диалога и документов..."):
+            summary_text, graph_html = build_graph_for_session(
+                session_id=session_id,
+                pdf_chunks=pdf_chunks,
+            )
+
+        # Показываем как отдельный ответ ассистента
+        with st.chat_message("assistant"):
+            st.markdown(summary_text)
+            if graph_html:
+                components.html(graph_html, height=600)
+
+        # Сохраняем в историю чата, чтобы граф оставался при последующих запросах
+        st.session_state["chat_history"].append(
+            {
+                "role": "assistant",
+                "content": summary_text,
+                "graph_html": graph_html,
+            }
+        )
 
 

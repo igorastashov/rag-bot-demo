@@ -54,6 +54,8 @@ NEO4J_PASSWORD=test1234
 
 PDF_STORAGE_ROOT=./data/pdf_storage
 RAG_SCOPE=session          # или global
+
+LLM_MAX_OUTPUT_TOKENS=2048
 ```
 
 - **Запустить Streamlit‑приложение**:
