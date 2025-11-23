@@ -10,7 +10,7 @@ from typing import Iterable, List, Optional, Tuple
 from .config import get_settings
 from .session_manager import get_session
 from .pdf_ingestion import _extract_text_from_pdf_bytes  # type: ignore
-from .graph_store import _build_pyvis_html  # type: ignore
+from .graph_store import _build_pyvis_html, _session_history_to_text  # type: ignore
 from .embedder import encode_texts
 from .llm_client import chat as app_llm_chat
 
@@ -34,6 +34,24 @@ except ImportError as e:  # pragma: no cover - защитный код
     EmbeddingFunc = None  # type: ignore
     setup_lightrag_logger = None  # type: ignore
     logger.warning("LightRAG is not available: %s", e)
+
+
+# Отдельный event loop для всех операций LightRAG в рамках этого процесса.
+_lightrag_loop: asyncio.AbstractEventLoop | None = None
+
+
+def _get_lightrag_loop() -> asyncio.AbstractEventLoop:
+    """
+    Возвращает (и при необходимости создаёт) единый event loop для RAG.
+
+    Это устраняет проблему RuntimeError: 'Lock ... is bound to a different event loop',
+    так как все async-операции RAG выполняются в одном и том же loop.
+    """
+    global _lightrag_loop
+    if _lightrag_loop is None or _lightrag_loop.is_closed():
+        _lightrag_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(_lightrag_loop)
+    return _lightrag_loop
 
 
 def _detect_embedding_dim() -> int:
@@ -97,11 +115,11 @@ async def _build_lightrag_graph_for_session_async(
 
     session_state = get_session(session_id)
     pdf_paths = [Path(p) for p in session_state.attached_pdfs if Path(p).is_file()]
+    history_text = _session_history_to_text(session_id).strip()
 
-    if not pdf_paths:
+    if not pdf_paths and not history_text:
         return (
-            "Для LightRAG не найдено прикреплённых PDF в текущей сессии. "
-            "Загрузите хотя бы один документ и попробуйте снова.",
+            "Недостаточно данных для построения графа: нет ни диалога, ни загруженных PDF.",
             None,
         )
 
@@ -165,7 +183,23 @@ async def _build_lightrag_graph_for_session_async(
                 file_paths=[str(pdf_path)],
             )
 
-        # 2) Собираем узлы и рёбра из графа LightRAG
+        # 2) Добавляем историю диалога как отдельный документ (если есть сообщения)
+        if history_text:
+            logger.info(
+                "Inserting chat history into LightRAG for session %s (chars=%d)",
+                session_id,
+                len(history_text),
+            )
+            # Документ с фиксированным ID; при повторных вызовах LightRAG сам
+            # пропустит дубликаты. Это даёт простой способ включить диалог
+            # в граф без сложной логики обновления.
+            await rag.ainsert(
+                [history_text],
+                ids=[f"chat_{session_id}"],
+                file_paths=[f"chat://{session_id}"],
+            )
+
+        # 3) Собираем узлы и рёбра из графа LightRAG
         nodes: List[dict] = []
         edges: List[dict] = []
 
@@ -200,8 +234,8 @@ async def _build_lightrag_graph_for_session_async(
 
         if not nodes:
             return (
-                "LightRAG не смог выделить сущности из документов текущей сессии "
-                "(граф пустой). Проверьте содержимое PDF.",
+                "LightRAG не смог выделить сущности из данных текущей сессии "
+                "(граф пустой). Проверьте содержимое диалога и документов.",
                 None,
             )
 
@@ -224,9 +258,11 @@ def build_lightrag_graph_for_session(
     """
     Синхронный фасад для использования в Streamlit UI.
 
-    Вызывает асинхронную логику через asyncio.run и возвращает (summary_text, graph_html).
+    Вызывает асинхронную логику в рамках единого event loop,
+    чтобы избежать конфликтов asyncio.Lock между разными loop.
     """
-    return asyncio.run(_build_lightrag_graph_for_session_async(session_id))
+    loop = _get_lightrag_loop()
+    return loop.run_until_complete(_build_lightrag_graph_for_session_async(session_id))
 
 
 __all__ = ["build_lightrag_graph_for_session"]
