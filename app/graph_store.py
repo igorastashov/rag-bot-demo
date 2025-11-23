@@ -114,6 +114,37 @@ def _upsert_graph(session: Session, session_id: str, nodes, edges) -> None:
         )
 
 
+def _extract_json_block(raw: str) -> str:
+    """
+    Try to robustly extract a JSON object from an LLM response.
+
+    Удаляет возможные Markdown-кодовые блоки и берёт подстроку
+    от первого '{' до последней '}'.
+    """
+    text = raw.strip()
+
+    # Удаляем обёртку ```json ... ``` или ``` ... ``` если есть
+    if text.startswith("```"):
+        # Снимаем первые три бэктика и возможный язык (json)
+        first_newline = text.find("\n")
+        if first_newline != -1:
+            text = text[first_newline + 1 :]
+        # Обрезаем на завершающих ```
+        end_fence = text.rfind("```")
+        if end_fence != -1:
+            text = text[:end_fence]
+        text = text.strip()
+
+    # Берём подстроку между первым '{' и последней '}'
+    start = text.find("{")
+    end = text.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        # Если не получилось, пусть парсер выше обработает как есть
+        return raw
+
+    return text[start : end + 1]
+
+
 def _build_pyvis_html(nodes, edges) -> str:
     """
     Build an interactive HTML graph using pyvis from nodes and edges.
@@ -161,11 +192,12 @@ def build_graph_for_session(
         max_tokens=1024,
     )
 
-    # We expect extraction to contain JSON; keep parsing minimal here.
+    # We expect extraction to contain JSON; пытаемся аккуратно достать его.
     import json
 
     try:
-        data = json.loads(extraction)
+        json_block = _extract_json_block(extraction)
+        data = json.loads(json_block)
     except json.JSONDecodeError:
         # Fallback: do not modify graph, just return text.
         return (

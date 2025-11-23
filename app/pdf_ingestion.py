@@ -47,6 +47,7 @@ def _extract_text_from_pdf_bytes(raw_bytes: bytes) -> Tuple[str, int]:
     """
     text_chunks: List[str] = []
     logger.info("Opening PDF with pdfplumber to extract text...")
+    page_count = 0
     try:
         with pdfplumber.open(io.BytesIO(raw_bytes)) as pdf:
             page_count = len(pdf.pages)
@@ -59,8 +60,10 @@ def _extract_text_from_pdf_bytes(raw_bytes: bytes) -> Tuple[str, int]:
                 else:
                     logger.debug("Page %d has no extractable text.", i)
     except Exception as e:
+        # Не падаем, а логируем и возвращаем пустой текст,
+        # чтобы вызывающая сторона могла корректно обработать.
         logger.exception("Error while extracting text from PDF: %s", e)
-        raise
+        return "", 0
 
     logger.info(
         "Finished extracting text from PDF (pages=%d, non-empty pages=%d)",
@@ -137,6 +140,20 @@ def ingest_uploaded_pdfs(
         # Extract and chunk text
         full_text, page_count = _extract_text_from_pdf_bytes(raw_bytes)
         if not full_text.strip():
+            logger.warning(
+                "No text extracted from PDF '%s' (session=%s). Skipping.",
+                original_name,
+                session_id,
+            )
+            stats.append(
+                {
+                    "file_name": original_name,
+                    "num_pages": page_count,
+                    "num_chunks": 0,
+                    "total_chars": 0,
+                    "error": "no_text_extracted",
+                }
+            )
             continue
 
         chunks = _simple_chunk_text(full_text)
