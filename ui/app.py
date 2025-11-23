@@ -24,9 +24,11 @@ from app.rag_pipeline import answer_question
 from app.session_manager import create_session, get_session
 from app.vector_store import get_collection
 from app.graph_store import build_graph_for_session
+from app.lightrag_graph import build_lightrag_graph_for_session
 
 
 settings = get_settings()
+USE_LIGHTRAG_GRAPH = os.getenv("GRAPH_BACKEND", "simple").lower() == "lightrag"
 
 st.set_page_config(page_title="RAG + GraphRAG Demo", layout="wide")
 st.title("RAG + GraphRAG Demo")
@@ -41,6 +43,7 @@ session_id: str = st.session_state["session_id"]
 st.sidebar.header("Settings")
 st.sidebar.write(f"RAG scope: **{settings.rag_scope}**")
 st.sidebar.write(f"Session ID: `{session_id}`")
+st.sidebar.write(f"Graph backend: **{'RAG' if USE_LIGHTRAG_GRAPH else 'Simple JSON'}**")
 
 
 if st.sidebar.button("🔄 Новый чат"):
@@ -120,28 +123,44 @@ if user_input := st.chat_input("Задайте вопрос..."):
 
 
 st.markdown("---")
-st.subheader("3. Граф знаний (Neo4j)")
+st.subheader("3. Граф знаний")
 
 if st.button("Построить/обновить граф знаний по текущей сессии"):
     session_state = get_session(session_id)
 
-    # Получаем все документы (чанки) из коллекции для текущей сессии
-    collection = get_collection(session_id)
-    data = collection.get(include=["documents"])
-    pdf_chunks = data.get("documents") or []
-
-    if not session_state.messages and not pdf_chunks:
-        st.warning(
-            "Недостаточно данных для построения графа. "
-            "Добавьте сообщения в чат или загрузите документы."
-        )
-    else:
-        with st.spinner("Строю граф знаний на основе диалога и документов..."):
-            summary_text, graph_html = build_graph_for_session(
-                session_id=session_id,
-                pdf_chunks=pdf_chunks,
+    if USE_LIGHTRAG_GRAPH:
+        # Режим LightRAG: строим граф только на основе прикреплённых к сессии PDF
+        if not session_state.attached_pdfs:
+            st.warning(
+                "Для построения графа через LightRAG необходимо хотя бы одно загруженное PDF. "
+                "Загрузите документ и повторите попытку."
             )
+        else:
+            with st.spinner("Строю граф знаний через LightRAG..."):
+                summary_text, graph_html = build_lightrag_graph_for_session(
+                    session_id=session_id,
+                )
+    else:
+        # Базовый режим: используем LLM‑JSON + чанки из Chroma
+        # Получаем все документы (чанки) из коллекции для текущей сессии
+        collection = get_collection(session_id)
+        data = collection.get(include=["documents"])
+        pdf_chunks = data.get("documents") or []
 
+        if not session_state.messages and not pdf_chunks:
+            st.warning(
+                "Недостаточно данных для построения графа. "
+                "Добавьте сообщения в чат или загрузите документы."
+            )
+            summary_text, graph_html = "", None
+        else:
+            with st.spinner("Строю граф знаний на основе диалога и документов..."):
+                summary_text, graph_html = build_graph_for_session(
+                    session_id=session_id,
+                    pdf_chunks=pdf_chunks,
+                )
+
+    if summary_text:
         # Показываем как отдельный ответ ассистента
         with st.chat_message("assistant"):
             st.markdown(summary_text)

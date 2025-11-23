@@ -36,3 +36,102 @@
 2025-11-23 17:29:03,560 - lightrag - INFO - Completed processing file 1/1: data\pdfs\Асташов Игорь.pdf
 2025-11-23 17:29:03,560 - lightrag - INFO - Enqueued document processing pipeline stopped
 2025-11-23 17:29:11,079 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 17:44:15,459 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load full_docs with 1 records
+2025-11-23 17:44:15,572 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load text_chunks with 2 records
+2025-11-23 17:44:15,579 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load full_entities with 1 records
+2025-11-23 17:44:15,586 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load full_relations with 1 records
+2025-11-23 17:44:15,594 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load entity_chunks with 47 records
+2025-11-23 17:44:15,600 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load relation_chunks with 49 records
+2025-11-23 17:44:15,660 - lightrag - INFO - [lightrag_test_session] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 17:44:15,671 - lightrag - WARNING - [lightrag_test_session] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 17:44:15,684 - lightrag - INFO - [lightrag_test_session] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 17:44:15,694 - lightrag - INFO - [lightrag_test_session] Ensured B-Tree index on entity_id for lightrag_test_session in None
+2025-11-23 17:44:15,738 - lightrag - INFO - [lightrag_test_session] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 17:44:15,738 - lightrag - INFO - [lightrag_test_session] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 17:44:15,751 - lightrag - INFO - [lightrag_test_session] Process 22232 KV load llm_response_cache with 4 records
+2025-11-23 17:44:15,762 - lightrag - INFO - [lightrag_test_session] Process 22232 doc status load doc_status with 1 records
+2025-11-23 17:44:15,907 - lightrag - WARNING - Ignoring document ID (already exists): Асташов Игорь.pdf (data\pdfs\Асташов Игорь.pdf)
+2025-11-23 17:44:15,908 - lightrag - WARNING - No new unique documents were found.
+2025-11-23 17:44:15,908 - lightrag - INFO - No documents to process
+2025-11-23 17:44:22,180 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 17:53:45,324 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load full_docs with 0 records
+2025-11-23 17:53:45,325 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load text_chunks with 0 records
+2025-11-23 17:53:45,325 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load full_entities with 0 records
+2025-11-23 17:53:45,326 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load full_relations with 0 records
+2025-11-23 17:53:45,326 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load entity_chunks with 0 records
+2025-11-23 17:53:45,326 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load relation_chunks with 0 records
+2025-11-23 17:53:45,385 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 17:53:45,396 - lightrag - WARNING - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 17:53:45,400 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 17:53:45,431 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Ensured B-Tree index on entity_id for session_b089ce62-84cd-4bc5-b7cb-f7e84d272116 in None
+2025-11-23 17:53:45,450 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 17:53:45,451 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 17:53:45,451 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 KV load llm_response_cache with 0 records
+2025-11-23 17:53:45,452 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Process 17640 doc status load doc_status with 0 records
+2025-11-23 17:53:46,342 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 17:53:46,343 - lightrag - INFO - Extracting stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Astashov_HSE (2).pdf
+2025-11-23 17:53:46,343 - lightrag - INFO - Processing d-id: Astashov_HSE (2).pdf
+2025-11-23 17:53:46,348 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 17:53:46,836 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 17:54:25,648 - lightrag - INFO -  == LLM cache == saving: default:extract:1ff1c5eef6f4dd8d2f5c974c665a78b9
+2025-11-23 17:54:25,649 - lightrag - WARNING - chunk-e3a8d4a587f681fe4cd3bf4b55888959: Complete delimiter can not be found in extraction result
+2025-11-23 17:54:25,656 - lightrag - WARNING - chunk-e3a8d4a587f681fe4cd3bf4b55888959: LLM output format error; found 3/5 fields on REALTION `Факультет Магистратуры Компьютерных Наук`~`Система мониторинга и оптимизации портфеля`
+2025-11-23 17:54:25,663 - lightrag - INFO -  == LLM cache == saving: default:extract:273c1976747468da7bb11985b1f224eb
+2025-11-23 17:54:25,674 - lightrag - INFO -  == LLM cache == saving: default:extract:1a8b8e98afe102d0e3894196eb3b298f
+2025-11-23 17:54:25,675 - lightrag - WARNING - chunk-f799443f4fb130bfd3b4c457bf282d40: Complete delimiter can not be found in extraction result
+2025-11-23 17:54:25,681 - lightrag - WARNING - chunk-f799443f4fb130bfd3b4c457bf282d40: LLM output format error; found 2/5 fields on REALTION `Новостной сентимент`~`N/A`
+2025-11-23 17:54:30,682 - lightrag - INFO -  == LLM cache == saving: default:extract:553682d5e988ebb325507180f706c624
+2025-11-23 17:54:30,683 - lightrag - INFO - Chunk 1 of 3 extracted 18 Ent + 17 Rel chunk-fa23ba802bc9cee475b05359857dcfd1
+2025-11-23 17:54:31,900 - lightrag - INFO -  == LLM cache == saving: default:extract:625426d4980f304bf7b16b956ee9ffbd
+2025-11-23 17:54:31,901 - lightrag - INFO - Chunk 2 of 3 extracted 20 Ent + 16 Rel chunk-f799443f4fb130bfd3b4c457bf282d40
+2025-11-23 17:54:54,145 - lightrag - INFO -  == LLM cache == saving: default:extract:966cb4bd796699400620709b65f80088
+2025-11-23 17:54:54,148 - lightrag - INFO - Chunk 3 of 3 extracted 28 Ent + 20 Rel chunk-e3a8d4a587f681fe4cd3bf4b55888959
+2025-11-23 17:54:54,148 - lightrag - INFO - Merging stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Astashov_HSE (2).pdf
+2025-11-23 17:54:54,149 - lightrag - INFO - Phase 1: Processing 65 entities from Astashov_HSE (2).pdf (async: 8)
+2025-11-23 17:54:56,050 - lightrag - INFO - Phase 2: Processing 53 relations from Astashov_HSE (2).pdf (async: 8)
+2025-11-23 17:54:57,808 - lightrag - INFO - Phase 3: Updating final 69(65+4) entities and  53 relations from Astashov_HSE (2).pdf
+2025-11-23 17:54:57,809 - lightrag - INFO - Completed merging: 65 entities, 4 extra entities, 53 relations
+2025-11-23 17:54:57,827 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 17:54:57,827 - lightrag - INFO - Completed processing file 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Astashov_HSE (2).pdf
+2025-11-23 17:54:57,828 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 17:54:57,983 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 17:54:57,984 - lightrag - INFO - Extracting stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Асташов Игорь.pdf
+2025-11-23 17:54:57,984 - lightrag - INFO - Processing d-id: Асташов Игорь.pdf
+2025-11-23 17:55:23,135 - lightrag - INFO -  == LLM cache == saving: default:extract:8acb66215ecc5677e91c7975933ad232
+2025-11-23 17:55:23,397 - lightrag - INFO -  == LLM cache == saving: default:extract:8f9c2c86e12f3e32a3ee0c183f8e18cc
+2025-11-23 17:55:23,397 - lightrag - INFO - Chunk 1 of 2 extracted 15 Ent + 14 Rel chunk-7c8ca7fa2286c8db074dd4618ff7b71d
+2025-11-23 17:55:32,576 - lightrag - INFO -  == LLM cache == saving: default:extract:ffac878a9935dcc0a7f6413ccd4f20e3
+2025-11-23 17:55:32,576 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: Complete delimiter can not be found in extraction result
+2025-11-23 17:56:06,109 - lightrag - INFO -  == LLM cache == saving: default:extract:262243446c2b9db1fad93e5782e5017f
+2025-11-23 17:56:06,113 - lightrag - INFO - Chunk 2 of 2 extracted 36 Ent + 31 Rel chunk-5b08968378bace273ab8f84749868975
+2025-11-23 17:56:06,114 - lightrag - INFO - Merging stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Асташов Игорь.pdf
+2025-11-23 17:56:06,114 - lightrag - INFO - Phase 1: Processing 42 entities from Асташов Игорь.pdf (async: 8)
+2025-11-23 17:56:06,155 - lightrag - INFO - Merged: `CatBoost` | 1+2
+2025-11-23 17:56:06,530 - lightrag - INFO - Merged: `ClearML` | 1+2
+2025-11-23 17:56:06,822 - lightrag - INFO - Merged: `Машинное обучение` | 1+1
+2025-11-23 17:56:06,940 - lightrag - INFO - Merged: `MLOps` | 1+1
+2025-11-23 17:56:07,525 - lightrag - INFO - Phase 2: Processing 37 relations from Асташов Игорь.pdf (async: 8)
+2025-11-23 17:56:09,319 - lightrag - INFO - Phase 3: Updating final 42(42+0) entities and  37 relations from Асташов Игорь.pdf
+2025-11-23 17:56:09,320 - lightrag - INFO - Completed merging: 42 entities, 0 extra entities, 37 relations
+2025-11-23 17:56:09,339 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 17:56:09,339 - lightrag - INFO - Completed processing file 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Асташов Игорь.pdf
+2025-11-23 17:56:09,340 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 17:56:35,565 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 18:03:08,504 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 18:03:08,515 - lightrag - WARNING - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 18:03:08,536 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 18:03:08,543 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Ensured B-Tree index on entity_id for session_b089ce62-84cd-4bc5-b7cb-f7e84d272116 in None
+2025-11-23 18:03:08,576 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 18:03:08,576 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 18:03:09,061 - lightrag - WARNING - Ignoring document ID (already exists): Astashov_HSE (2).pdf (D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Astashov_HSE (2).pdf)
+2025-11-23 18:03:09,062 - lightrag - WARNING - No new unique documents were found.
+2025-11-23 18:03:09,064 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 18:04:54,411 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 18:04:54,421 - lightrag - WARNING - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 18:04:54,423 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 18:04:54,427 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Ensured B-Tree index on entity_id for session_b089ce62-84cd-4bc5-b7cb-f7e84d272116 in None
+2025-11-23 18:04:54,431 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 18:04:54,432 - lightrag - INFO - [session_b089ce62-84cd-4bc5-b7cb-f7e84d272116] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 18:04:54,938 - lightrag - WARNING - Ignoring document ID (already exists): Astashov_HSE (2).pdf (D:\__projects__\drop-rag\data\pdf_storage\session_b089ce62-84cd-4bc5-b7cb-f7e84d272116\Astashov_HSE (2).pdf)
+2025-11-23 18:04:54,939 - lightrag - WARNING - No new unique documents were found.
+2025-11-23 18:04:54,941 - lightrag - INFO - Successfully finalized 12 storages

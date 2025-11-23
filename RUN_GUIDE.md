@@ -44,7 +44,10 @@ LLM_API_KEY=dummy
 LLM_MODEL_NAME=qwen-4b-instruct
 
 EMBEDDER_MODEL_PATH=./models/bge-m3
-EMBEDDER_DEVICE=cpu        # или cuda:0 / cuda:1 при готовом CUDA-окружении
+# сначала можно проверить на CPU:
+# EMBEDDER_DEVICE=cpu
+# потом, когда убедишься, что torch с CUDA норм, поменять на:
+EMBEDDER_DEVICE=cuda:0
 
 CHROMA_DB_PATH=./data/chroma_db
 
@@ -53,9 +56,19 @@ NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=test1234
 
 PDF_STORAGE_ROOT=./data/pdf_storage
-RAG_SCOPE=session          # или global
+RAG_SCOPE=session
 
 LLM_MAX_OUTPUT_TOKENS=2048
+
+# Выбор бекенда графа для UI:
+GRAPH_BACKEND=lightrag      # LightRAG
+# GRAPH_BACKEND=simple      # старый режим, если нужно откатиться
+
+# Рабочая директория LightRAG (по умолчанию data/lightrag_storage):
+# LIGHTRAG_WORKING_DIR=./data/lightrag_storage
+
+# Язык описаний сущностей/связей в LightRAG:
+SUMMARY_LANGUAGE=Russian    # или, если хотите, "Русский"
 ```
 
 - **Запустить Streamlit‑приложение**:

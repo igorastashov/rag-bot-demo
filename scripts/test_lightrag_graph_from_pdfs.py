@@ -199,7 +199,7 @@ async def build_lightrag_graph_from_pdfs(
         html_path.write_text(html, encoding="utf-8")
 
         summary = (
-            "Граф знаний построен через LightRAG и сохранён в Neo4j.\n"
+            "Граф знаний построен.\n"
             f"Сущностей: {len(nodes)}, связей: {len(edges)}.\n"
             f"HTML‑визуализация: {html_path}"
         )
@@ -249,7 +249,11 @@ def main() -> None:
     logger.info("CHROMA_DB_PATH=%s", settings.chroma_db_path)
     logger.info("NEO4J_URI=%s", settings.neo4j_uri)
 
-    working_dir = PROJECT_ROOT / "data" / "lightrag_storage"
+    default_working_dir = PROJECT_ROOT / "data" / "lightrag_storage"
+    working_dir_env = os.getenv("LIGHTRAG_WORKING_DIR")
+    working_dir = (
+        Path(working_dir_env).resolve() if working_dir_env else default_working_dir
+    )
 
     summary_text: str
     html_path: Path | None
