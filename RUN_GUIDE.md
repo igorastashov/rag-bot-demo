@@ -134,6 +134,11 @@ docker build -t drop-rag-app .
 - рабочая директория внутри контейнера — `/app`;
 - по умолчанию запускается `streamlit run ui/app.py` на порту `8501`.
 
+Образ собирается на базе `nvidia/cuda:12.8.1-base-ubuntu22.04`, внутри устанавливается Python 3.10 и
+`torch/torchvision` из локальных wheel‑файлов под CUDA 12.8.  
+Благодаря этому контейнер может использовать GPU при наличии NVIDIA‑драйвера и `nvidia-container-toolkit`
+на хост‑машине.
+
 > Примечание: папка `models/` и данные (`data/`) по умолчанию находятся внутри образа, но для реальной эксплуатации лучше использовать тома (см. ниже).
 
 ### 4.3. Подготовка `.env` для контейнера
@@ -227,3 +232,81 @@ docker run --rm \
    - вопрос без PDF;
    - загрузка PDF и индексация;
    - построение графа (RAG‑граф через LightRAG).
+
+### 4.7. GPU‑режим через docker‑compose (NVIDIA)
+
+Этот режим использует `docker-compose.yml` и автоматически резервирует GPU для контейнера приложения.
+
+**Предусловия (кроме пункта 4.1):**
+
+- на хост‑машине установлены NVIDIA‑драйверы;
+- установлен и настроен `nvidia-container-toolkit` (поддержка GPU в Docker);
+- в `.env` для эмбеддера указан GPU‑режим, например:
+
+```env
+EMBEDDER_DEVICE=cuda:0
+```
+
+**`docker-compose.yml` (фрагмент для сервиса приложения)** уже присутствует в репозитории и содержит
+обязательный GPU‑блок:
+
+```yaml
+  app:
+    build: .
+    image: drop-rag-app
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+
+    # devices:
+
+    # - "/dev/nvidia0:/dev/nvidia0"
+
+    # - "/dev/nvidiactl:/dev/nvidiactl"
+
+    # - "/dev/nvidia-uvm:/dev/nvidia-uvm"
+
+
+
+    # runtime: nvidia
+
+
+
+    deploy:
+
+      resources:
+
+        reservations:
+
+          devices:
+
+            - driver: nvidia
+
+              count: all
+
+              capabilities: [gpu]
+```
+
+Комментарированные строки `devices` и `runtime: nvidia` сохранены **в точности**, как в примере выше.  
+Блок `deploy.resources.reservations.devices` активен и сообщает Docker, что сервису нужен доступ к GPU.
+
+**Запуск в GPU‑режиме через docker‑compose:**
+
+```bash
+cd D:/__projects__/drop-rag
+docker compose up --build
+```
+
+При этом:
+
+- будет собран тот же образ `drop-rag-app` (на базе CUDA);
+- контейнер получит доступ ко всем доступным GPU (`count: all`);
+- тома `./data` и `./models` будут примонтированы к `/app/data` и `/app/models`.
+
+Если нужно оставить GPU только для хостового запуска (без docker‑compose), можно использовать
+вариант из раздела 4.4–4.6 и задать `EMBEDDER_DEVICE=cpu` в `.env` — в этом случае контейнер будет работать
+на любой машине, даже без GPU (но медленнее).

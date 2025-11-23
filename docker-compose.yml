@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    image: drop-rag-app
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+
+    # devices:
+
+    # - "/dev/nvidia0:/dev/nvidia0"
+
+    # - "/dev/nvidiactl:/dev/nvidiactl"
+
+    # - "/dev/nvidia-uvm:/dev/nvidia-uvm"
+
+
+
+    # runtime: nvidia
+
+
+
+    deploy:
+
+      resources:
+
+        reservations:
+
+          devices:
+
+            - driver: nvidia
+
+              count: all
+
+              capabilities: [gpu]
+
+

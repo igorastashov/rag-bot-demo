@@ -1191,3 +1191,4 @@
 2025-11-23 20:04:09,093 - lightrag - INFO - In memory DB persist to disk
 2025-11-23 20:04:09,093 - lightrag - INFO - Completed processing file 1/1: chat://867002c3-c910-4403-9716-10b918104a3d
 2025-11-23 20:04:09,094 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 20:43:35,000 - lightrag - INFO - Successfully finalized 12 storages
