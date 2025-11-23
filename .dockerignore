@@ -1,0 +1,22 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+terminals
+
+# Логи и артефакты
+*.log
+data/chroma_db
+data/pdf_storage
+data/lightrag_storage
+data/graphs
+
+# Кэш/временные файлы
+.mypy_cache
+.pytest_cache
+.DS_Store
+
+
