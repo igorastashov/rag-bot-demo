@@ -4,6 +4,7 @@ import asyncio
 import logging
 import os
 import sys
+import threading
 from pathlib import Path
 from typing import Iterable, List, Optional, Tuple
 
@@ -34,24 +35,6 @@ except ImportError as e:  # pragma: no cover - защитный код
     EmbeddingFunc = None  # type: ignore
     setup_lightrag_logger = None  # type: ignore
     logger.warning("LightRAG is not available: %s", e)
-
-
-# Отдельный event loop для всех операций LightRAG в рамках этого процесса.
-_lightrag_loop: asyncio.AbstractEventLoop | None = None
-
-
-def _get_lightrag_loop() -> asyncio.AbstractEventLoop:
-    """
-    Возвращает (и при необходимости создаёт) единый event loop для RAG.
-
-    Это устраняет проблему RuntimeError: 'Lock ... is bound to a different event loop',
-    так как все async-операции RAG выполняются в одном и том же loop.
-    """
-    global _lightrag_loop
-    if _lightrag_loop is None or _lightrag_loop.is_closed():
-        _lightrag_loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(_lightrag_loop)
-    return _lightrag_loop
 
 
 def _detect_embedding_dim() -> int:
@@ -268,11 +251,36 @@ def build_lightrag_graph_for_session(
     """
     Синхронный фасад для использования в Streamlit UI.
 
-    Вызывает асинхронную логику в рамках единого event loop,
-    чтобы избежать конфликтов asyncio.Lock между разными loop.
+    Запускает асинхронную логику в отдельном потоке, чтобы избежать
+    конфликтов с уже работающим event loop (например, внутри Streamlit).
     """
-    loop = _get_lightrag_loop()
-    return loop.run_until_complete(_build_lightrag_graph_for_session_async(session_id))
+    result: List[Tuple[str, Optional[str]]] = []
+    error: List[BaseException] = []
+
+    def _worker() -> None:
+        try:
+            res = asyncio.run(_build_lightrag_graph_for_session_async(session_id))
+            result.append(res)
+        except BaseException as e:  # pragma: no cover - пробрасываем наверх
+            error.append(e)
+
+    thread = threading.Thread(
+        target=_worker,
+        name=f"lightrag-graph-{session_id}",
+        daemon=True,
+    )
+    thread.start()
+    thread.join()
+
+    if error:
+        raise error[0]
+    if not result:
+        # Защитный fallback, не должен срабатывать в нормальном сценарии
+        return (
+            "Не удалось построить граф (внутренняя ошибка при построении графа).",
+            None,
+        )
+    return result[0]
 
 
 __all__ = ["build_lightrag_graph_for_session"]
