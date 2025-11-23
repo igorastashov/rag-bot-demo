@@ -1,0 +1,38 @@
+2025-11-23 17:26:21,373 - lightrag - INFO - Creating working directory D:\__projects__\drop-rag\data\lightrag_storage
+2025-11-23 17:27:52,307 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load full_docs with 0 records
+2025-11-23 17:27:52,308 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load text_chunks with 0 records
+2025-11-23 17:27:52,308 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load full_entities with 0 records
+2025-11-23 17:27:52,309 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load full_relations with 0 records
+2025-11-23 17:27:52,309 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load entity_chunks with 0 records
+2025-11-23 17:27:52,309 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load relation_chunks with 0 records
+2025-11-23 17:27:52,384 - lightrag - INFO - [lightrag_test_session] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 17:27:52,555 - lightrag - WARNING - [lightrag_test_session] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 17:27:52,584 - lightrag - INFO - [lightrag_test_session] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 17:27:52,628 - lightrag - INFO - [lightrag_test_session] Ensured B-Tree index on entity_id for lightrag_test_session in None
+2025-11-23 17:27:52,674 - lightrag - INFO - [lightrag_test_session] No existing index 'entity_id_fulltext_idx' found. Creating new index.
+2025-11-23 17:27:52,674 - lightrag - INFO - [lightrag_test_session] Creating full-text index 'entity_id_fulltext_idx' with Chinese tokenizer support.
+2025-11-23 17:27:52,754 - lightrag - INFO - [lightrag_test_session] Successfully created full-text index 'entity_id_fulltext_idx' with CJK analyzer.
+2025-11-23 17:27:52,755 - lightrag - INFO - [lightrag_test_session] Process 17384 KV load llm_response_cache with 0 records
+2025-11-23 17:27:52,755 - lightrag - INFO - [lightrag_test_session] Process 17384 doc status load doc_status with 0 records
+2025-11-23 17:27:52,893 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 17:27:52,893 - lightrag - INFO - Extracting stage 1/1: data\pdfs\Асташов Игорь.pdf
+2025-11-23 17:27:52,893 - lightrag - INFO - Processing d-id: Асташов Игорь.pdf
+2025-11-23 17:27:52,896 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 17:27:53,027 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 17:28:13,652 - lightrag - INFO -  == LLM cache == saving: default:extract:ae6dc65457a7f39686da63706be87925
+2025-11-23 17:28:15,637 - lightrag - INFO -  == LLM cache == saving: default:extract:8042092e47f73c9dd36a87200fb58f11
+2025-11-23 17:28:15,638 - lightrag - INFO - Chunk 1 of 2 extracted 16 Ent + 15 Rel chunk-7c8ca7fa2286c8db074dd4618ff7b71d
+2025-11-23 17:28:27,402 - lightrag - INFO -  == LLM cache == saving: default:extract:320475cf9a60fa5f9e3cecb488d34d46
+2025-11-23 17:28:27,403 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: Complete delimiter can not be found in extraction result
+2025-11-23 17:28:27,407 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: LLM output format error; found 2/5 fields on REALTION `I`~`N/A`
+2025-11-23 17:28:59,185 - lightrag - INFO -  == LLM cache == saving: default:extract:3acda13117a3e7a235b8839051cdf243
+2025-11-23 17:28:59,189 - lightrag - INFO - Chunk 2 of 2 extracted 43 Ent + 44 Rel chunk-5b08968378bace273ab8f84749868975
+2025-11-23 17:28:59,190 - lightrag - INFO - Merging stage 1/1: data\pdfs\Асташов Игорь.pdf
+2025-11-23 17:28:59,190 - lightrag - INFO - Phase 1: Processing 47 entities from Асташов Игорь.pdf (async: 8)
+2025-11-23 17:29:00,841 - lightrag - INFO - Phase 2: Processing 49 relations from Асташов Игорь.pdf (async: 8)
+2025-11-23 17:29:03,543 - lightrag - INFO - Phase 3: Updating final 47(47+0) entities and  49 relations from Асташов Игорь.pdf
+2025-11-23 17:29:03,544 - lightrag - INFO - Completed merging: 47 entities, 0 extra entities, 49 relations
+2025-11-23 17:29:03,559 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 17:29:03,560 - lightrag - INFO - Completed processing file 1/1: data\pdfs\Асташов Игорь.pdf
+2025-11-23 17:29:03,560 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 17:29:11,079 - lightrag - INFO - Successfully finalized 12 storages

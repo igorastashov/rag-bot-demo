@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Iterable, List, Tuple, Optional
+import logging
 
 from neo4j import GraphDatabase, Session
 from pyvis.network import Network
@@ -11,6 +12,7 @@ from .llm_client import chat as llm_chat
 from .session_manager import get_session
 
 
+logger = logging.getLogger(__name__)
 _settings = get_settings()
 
 
@@ -43,9 +45,15 @@ GRAPH_SYSTEM_PROMPT = (
     "You are an assistant that extracts a simple knowledge graph from text.\n"
     "Given the conversation history and text chunks from PDFs, you should "
     "identify important entities and relationships between them.\n\n"
-    "Return the result as JSON with two arrays: 'nodes' and 'edges'.\n"
+    "Return the result as a single valid JSON object with two arrays: "
+    "'nodes' and 'edges'.\n"
     "Each node: {\"id\": string, \"label\": string}.\n"
     "Each edge: {\"source\": string, \"target\": string, \"type\": string}.\n"
+    "Do not output any text before or after the JSON object. "
+    "Use only double quotes for strings and do not use comments or trailing "
+    "commas.\n"
+    "Limit the size of the graph to at most 30 nodes and 60 edges, choosing "
+    "the most important entities and relationships.\n"
 )
 
 
@@ -145,6 +153,109 @@ def _extract_json_block(raw: str) -> str:
     return text[start : end + 1]
 
 
+def _try_parse_json_with_trimming(raw: str):
+    """
+    Попробовать распарсить JSON, по необходимости обрезая хвост.
+
+    Это хак для случаев, когда LLM обрывает вывод внутри массива,
+    оставляя "хвост" без закрывающих скобок/кавычек.
+    """
+    import json
+
+    # Сначала пробуем как есть
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as e:
+        logger.warning("Initial JSON parse failed: %s", e)
+
+    last_error: Optional[json.JSONDecodeError] = None
+
+    # Пробуем обрезать хвост по нескольким шагам
+    for cut in range(1, 200):
+        trimmed = raw[:-cut].rstrip()
+        # Обрезаем до последней закрывающей скобки или фигурной скобки
+        last_brace = max(trimmed.rfind("}"), trimmed.rfind("]"))
+        if last_brace == -1:
+            break
+        candidate = trimmed[: last_brace + 1]
+        try:
+            data = json.loads(candidate)
+            logger.info("JSON successfully parsed after trimming %d chars", cut)
+            return data
+        except json.JSONDecodeError as e:
+            last_error = e
+            continue
+
+    # Если ничего не вышло — пробрасываем последнее исключение дальше
+    if last_error is not None:
+        raise last_error
+    # На всякий случай, если ошибок не было (что странно), пробрасываем общее
+    raise json.JSONDecodeError("Unable to parse JSON after trimming", raw, 0)
+
+
+def _iter_json_objects(text: str):
+    """
+    Iterate over top-level JSON object substrings in given text by tracking
+    curly brace balance. Used as a fallback when the overall JSON response
+    is damaged, but individual objects are still valid.
+    """
+    depth = 0
+    start: Optional[int] = None
+
+    for i, ch in enumerate(text):
+        if ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}":
+            if depth > 0:
+                depth -= 1
+                if depth == 0 and start is not None:
+                    yield text[start : i + 1]
+                    start = None
+
+
+def _salvage_nodes_edges_from_partial(raw: str):
+    """
+    Fallback‑разбор, если общий JSON сломан (например, обрезан по длине),
+    но отдельные объекты всё ещё корректны.
+
+    Стратегия:
+      - находим все подстроки вида {...} с помощью балансировки скобок;
+      - пытаемся распарсить каждую как отдельный JSON‑объект;
+      - объекты с ключами ('id', 'label') считаем узлами;
+      - объекты с ключами ('source', 'target') считаем рёбрами.
+    """
+    import json
+
+    nodes = []
+    edges = []
+    seen_node_ids = set()
+
+    for obj_str in _iter_json_objects(raw):
+        try:
+            obj = json.loads(obj_str)
+        except json.JSONDecodeError:
+            continue
+
+        if not isinstance(obj, dict):
+            continue
+
+        # Пропускаем корневой объект вида {"nodes": [...], "edges": [...]}
+        if "nodes" in obj or "edges" in obj:
+            continue
+
+        if "source" in obj and "target" in obj:
+            edges.append(obj)
+        elif "id" in obj and "label" in obj:
+            node_id = obj.get("id")
+            if node_id not in seen_node_ids:
+                nodes.append(obj)
+                seen_node_ids.add(node_id)
+
+    return nodes, edges
+
+
 def _build_pyvis_html(nodes, edges) -> str:
     """
     Build an interactive HTML graph using pyvis from nodes and edges.
@@ -195,17 +306,49 @@ def build_graph_for_session(
     # We expect extraction to contain JSON; пытаемся аккуратно достать его.
     import json
 
+    json_block: Optional[str] = None
     try:
         json_block = _extract_json_block(extraction)
-        data = json.loads(json_block)
-    except json.JSONDecodeError:
-        # Fallback: do not modify graph, just return text.
-        return (
-            "Не удалось корректно разобрать граф из ответа LLM. "
-            "Вот ответ модели:\n\n"
-            f"{extraction}",
-            None,
+        data = _try_parse_json_with_trimming(json_block)
+    except json.JSONDecodeError as e:
+        logger.warning("Failed to parse graph JSON even after trimming: %s", e)
+        # Дополнительный fallback: пытаемся вытащить отдельные узлы/рёбра
+        # даже из частично повреждённого JSON.
+        salvage_source = json_block if json_block is not None else extraction
+        nodes, edges = _salvage_nodes_edges_from_partial(salvage_source)
+
+        if not nodes and not edges:
+            # Совсем ничего не удалось восстановить — сохраняем старое поведение.
+            return (
+                "Не удалось корректно разобрать граф из ответа LLM. "
+                "Вот ответ модели:\n\n"
+                f"{extraction}",
+                None,
+            )
+
+        logger.warning(
+            "Graph JSON is damaged; using salvaged data: %d node(s), %d edge(s)",
+            len(nodes),
+            len(edges),
         )
+
+        # Строим граф по частично восстановленным данным.
+        with _get_driver() as driver:
+            with driver.session() as session:
+                _upsert_graph(session, session_id, nodes, edges)
+
+        graph_html: Optional[str] = None
+        try:
+            graph_html = _build_pyvis_html(nodes, edges)
+        except Exception:
+            graph_html = None
+
+        summary = (
+            "Ответ LLM содержал некорректный JSON, но удалось частично "
+            "восстановить граф знаний в Neo4j "
+            f"(узлов: {len(nodes)}, рёбер: {len(edges)})."
+        )
+        return summary, graph_html
 
     nodes = data.get("nodes", [])
     edges = data.get("edges", [])
