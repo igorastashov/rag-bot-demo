@@ -47,9 +47,12 @@ st.sidebar.write(f"Graph backend: **{'RAG' if USE_LIGHTRAG_GRAPH else 'Simple JS
 
 
 if st.sidebar.button("🔄 Новый чат"):
+    # Создаём новую серверную сессию (SessionState) и полностью очищаем
+    # Streamlit-состояние, чтобы сбросить историю чата и прочие флаги.
     session = create_session()
+    st.session_state.clear()
     st.session_state["session_id"] = session.session_id
-    st.experimental_rerun()
+    st.rerun()
 
 
 st.subheader("1. Загрузка PDF")

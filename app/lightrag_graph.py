@@ -185,17 +185,27 @@ async def _build_lightrag_graph_for_session_async(
 
         # 2) Добавляем историю диалога как отдельный документ (если есть сообщения)
         if history_text:
+            chat_doc_id = f"chat_{session_id}"
             logger.info(
-                "Inserting chat history into LightRAG for session %s (chars=%d)",
+                "Refreshing chat history in LightRAG for session %s (chars=%d)",
                 session_id,
                 len(history_text),
             )
-            # Документ с фиксированным ID; при повторных вызовах LightRAG сам
-            # пропустит дубликаты. Это даёт простой способ включить диалог
-            # в граф без сложной логики обновления.
+            # Сначала аккуратно удаляем предыдущую версию чат-документа (если была),
+            # чтобы новые факты из диалога (например, новые сущности и связи)
+            # пересчитались и попали в граф.
+            try:
+                await rag.adelete_by_doc_id(chat_doc_id, delete_llm_cache=False)
+            except Exception as e:  # защитный fallback, не роняем весь пайплайн
+                logger.warning(
+                    "Failed to delete previous chat document %s from LightRAG: %s",
+                    chat_doc_id,
+                    e,
+                )
+
             await rag.ainsert(
                 [history_text],
-                ids=[f"chat_{session_id}"],
+                ids=[chat_doc_id],
                 file_paths=[f"chat://{session_id}"],
             )
 

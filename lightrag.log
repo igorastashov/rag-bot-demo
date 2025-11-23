@@ -279,3 +279,349 @@
 2025-11-23 18:32:59,011 - lightrag - WARNING - No new unique documents were found.
 2025-11-23 18:32:59,011 - lightrag - INFO - No documents to process
 2025-11-23 18:33:18,025 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:09:21,702 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load full_docs with 0 records
+2025-11-23 19:09:21,702 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load text_chunks with 0 records
+2025-11-23 19:09:21,703 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load full_entities with 0 records
+2025-11-23 19:09:21,703 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load full_relations with 0 records
+2025-11-23 19:09:21,704 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load entity_chunks with 0 records
+2025-11-23 19:09:21,704 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load relation_chunks with 0 records
+2025-11-23 19:09:21,764 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:09:21,779 - lightrag - WARNING - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:09:21,782 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:09:21,826 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Ensured B-Tree index on entity_id for session_0b91a432-f402-4229-aa7e-baa4cebc81b7 in None
+2025-11-23 19:09:21,837 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:09:21,838 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:09:21,838 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 KV load llm_response_cache with 0 records
+2025-11-23 19:09:21,839 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Process 16864 doc status load doc_status with 0 records
+2025-11-23 19:09:21,839 - lightrag - INFO - Starting deletion process for document chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:21,840 - lightrag - WARNING - Document chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 not found
+2025-11-23 19:09:21,840 - lightrag - INFO - Deletion process completed for document: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:21,842 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:09:21,843 - lightrag - INFO - Extracting stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:21,843 - lightrag - INFO - Processing d-id: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:21,844 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:09:21,994 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:09:27,309 - lightrag - INFO -  == LLM cache == saving: default:extract:5be1fab98127a85bc9847b97fe0810d3
+2025-11-23 19:09:27,523 - lightrag - INFO -  == LLM cache == saving: default:extract:c65cba695fa3aeb9689e1eca7b959e87
+2025-11-23 19:09:27,524 - lightrag - INFO - Chunk 1 of 1 extracted 4 Ent + 3 Rel chunk-7927dc78f4e2617c64d0122e39e69cbe
+2025-11-23 19:09:27,524 - lightrag - INFO - Merging stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:27,525 - lightrag - INFO - Phase 1: Processing 4 entities from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:09:27,974 - lightrag - INFO - Phase 2: Processing 3 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:09:28,426 - lightrag - INFO - Phase 3: Updating final 4(4+0) entities and  3 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:28,426 - lightrag - INFO - Completed merging: 4 entities, 0 extra entities, 3 relations
+2025-11-23 19:09:28,432 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:09:28,433 - lightrag - INFO - Completed processing file 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:09:28,433 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:09:28,688 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:12:39,243 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:12:39,253 - lightrag - WARNING - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:12:39,277 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:12:39,284 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Ensured B-Tree index on entity_id for session_0b91a432-f402-4229-aa7e-baa4cebc81b7 in None
+2025-11-23 19:12:39,321 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:12:39,321 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:12:39,322 - lightrag - INFO - Starting deletion process for document chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:39,442 - lightrag - INFO - Found 0 affected entities
+2025-11-23 19:12:39,442 - lightrag - INFO - Found 0 affected relations
+2025-11-23 19:12:39,443 - lightrag - INFO - Successfully deleted 1 chunks from storage
+2025-11-23 19:12:39,536 - lightrag - INFO - Successfully deleted 3 relations
+2025-11-23 19:12:39,678 - lightrag - INFO - Successfully deleted 4 entities
+2025-11-23 19:12:39,681 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:12:39,683 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:12:39,683 - lightrag - INFO - Deletion process completed for document: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:39,686 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:12:39,686 - lightrag - INFO - Extracting stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:39,686 - lightrag - INFO - Processing d-id: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:39,689 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:12:40,072 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:12:48,959 - lightrag - INFO -  == LLM cache == saving: default:extract:d02a2c61e7616d1f38179f3dceb25034
+2025-11-23 19:12:52,213 - lightrag - INFO -  == LLM cache == saving: default:extract:ece735e1361bd8fa227d649dce0babad
+2025-11-23 19:12:52,450 - lightrag - INFO -  == LLM cache == saving: default:extract:d871691b4e678772ab61382c87feb31d
+2025-11-23 19:12:52,451 - lightrag - INFO - Chunk 1 of 2 extracted 5 Ent + 6 Rel chunk-88d8ac18ea4a66c16db240f0e7a798a5
+2025-11-23 19:12:57,530 - lightrag - INFO -  == LLM cache == saving: default:extract:2e0d7404104df6fa584d77446187efca
+2025-11-23 19:12:57,532 - lightrag - INFO - Chunk 2 of 2 extracted 5 Ent + 5 Rel chunk-68e4192b0b7413f06073c2ef0c774bd8
+2025-11-23 19:12:57,533 - lightrag - INFO - Merging stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:57,533 - lightrag - INFO - Phase 1: Processing 9 entities from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:12:58,012 - lightrag - INFO - Phase 2: Processing 9 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:12:58,437 - lightrag - INFO - Phase 3: Updating final 9(9+0) entities and  9 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:58,437 - lightrag - INFO - Completed merging: 9 entities, 0 extra entities, 9 relations
+2025-11-23 19:12:58,446 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:12:58,446 - lightrag - INFO - Completed processing file 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:12:58,447 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:12:58,950 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:15:43,858 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:15:43,866 - lightrag - WARNING - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:15:43,869 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:15:43,873 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Ensured B-Tree index on entity_id for session_0b91a432-f402-4229-aa7e-baa4cebc81b7 in None
+2025-11-23 19:15:43,877 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:15:43,878 - lightrag - INFO - [session_0b91a432-f402-4229-aa7e-baa4cebc81b7] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:15:44,015 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:15:44,016 - lightrag - INFO - Extracting stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0b91a432-f402-4229-aa7e-baa4cebc81b7\Асташов Игорь.pdf
+2025-11-23 19:15:44,016 - lightrag - INFO - Processing d-id: Асташов Игорь.pdf
+2025-11-23 19:15:44,019 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:15:44,410 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:16:09,345 - lightrag - INFO -  == LLM cache == saving: default:extract:8acb66215ecc5677e91c7975933ad232
+2025-11-23 19:16:09,603 - lightrag - INFO -  == LLM cache == saving: default:extract:53a5b08e79b3f14b78395c1894cbfe31
+2025-11-23 19:16:09,604 - lightrag - INFO - Chunk 1 of 2 extracted 15 Ent + 14 Rel chunk-7c8ca7fa2286c8db074dd4618ff7b71d
+2025-11-23 19:16:18,274 - lightrag - INFO -  == LLM cache == saving: default:extract:ffac878a9935dcc0a7f6413ccd4f20e3
+2025-11-23 19:16:18,275 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: Complete delimiter can not be found in extraction result
+2025-11-23 19:16:51,791 - lightrag - INFO -  == LLM cache == saving: default:extract:ad3d3bde52e9626adc0a3d1005a3f5d0
+2025-11-23 19:16:51,791 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: Complete delimiter can not be found in extraction result
+2025-11-23 19:16:51,795 - lightrag - WARNING - chunk-5b08968378bace273ab8f84749868975: LLM output format error; found 4/5 fields on REALTION `Асташов Игорь`~`Автоматизация производственных задач`
+2025-11-23 19:16:51,796 - lightrag - INFO - Chunk 2 of 2 extracted 37 Ent + 28 Rel chunk-5b08968378bace273ab8f84749868975
+2025-11-23 19:16:51,796 - lightrag - INFO - Merging stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0b91a432-f402-4229-aa7e-baa4cebc81b7\Асташов Игорь.pdf
+2025-11-23 19:16:51,797 - lightrag - INFO - Phase 1: Processing 43 entities from Асташов Игорь.pdf (async: 8)
+2025-11-23 19:16:53,024 - lightrag - INFO - Phase 2: Processing 34 relations from Асташов Игорь.pdf (async: 8)
+2025-11-23 19:16:54,655 - lightrag - INFO - Phase 3: Updating final 43(43+0) entities and  34 relations from Асташов Игорь.pdf
+2025-11-23 19:16:54,656 - lightrag - INFO - Completed merging: 43 entities, 0 extra entities, 34 relations
+2025-11-23 19:16:54,670 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:16:54,670 - lightrag - INFO - Completed processing file 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0b91a432-f402-4229-aa7e-baa4cebc81b7\Асташов Игорь.pdf
+2025-11-23 19:16:54,671 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:16:54,671 - lightrag - INFO - Starting deletion process for document chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:16:54,777 - lightrag - INFO - Found 0 affected entities
+2025-11-23 19:16:54,779 - lightrag - INFO - Found 0 affected relations
+2025-11-23 19:16:54,781 - lightrag - INFO - Successfully deleted 2 chunks from storage
+2025-11-23 19:16:54,950 - lightrag - INFO - Successfully deleted 9 relations
+2025-11-23 19:16:55,098 - lightrag - INFO - Successfully deleted 9 entities
+2025-11-23 19:16:55,107 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:16:55,115 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:16:55,115 - lightrag - INFO - Deletion process completed for document: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:16:55,118 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:16:55,118 - lightrag - INFO - Extracting stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:16:55,119 - lightrag - INFO - Processing d-id: chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:17:04,178 - lightrag - INFO -  == LLM cache == saving: default:extract:84251bc813179fa8f0c4c8b2c07cd190
+2025-11-23 19:17:13,119 - lightrag - INFO -  == LLM cache == saving: default:extract:0413cd4fc6ca3fd0186aed41689f5dcf
+2025-11-23 19:17:13,121 - lightrag - INFO - Chunk 1 of 2 extracted 5 Ent + 5 Rel chunk-c781d38be50f7854d45dc573f8c16b53
+2025-11-23 19:17:20,659 - lightrag - INFO -  == LLM cache == saving: default:extract:25e60b08a8f31c617a0fc0c01ae92685
+2025-11-23 19:17:24,827 - lightrag - INFO -  == LLM cache == saving: default:extract:7f2f21b692e8877419ac0d9fd1492376
+2025-11-23 19:17:24,828 - lightrag - INFO - Chunk 2 of 2 extracted 16 Ent + 13 Rel chunk-0c9cc5375f49c1db48bfb8ebc1df1e2b
+2025-11-23 19:17:24,828 - lightrag - INFO - Merging stage 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:17:24,829 - lightrag - INFO - Phase 1: Processing 19 entities from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:17:24,859 - lightrag - INFO - Merged: `Компьютерное зрение` | 1+1
+2025-11-23 19:17:24,859 - lightrag - INFO - Merged: `Машинное обучение` | 1+1
+2025-11-23 19:17:25,304 - lightrag - INFO - Merged: `Python` | 1+1
+2025-11-23 19:17:25,316 - lightrag - INFO - Merged: `CatBoost` | 2+1
+2025-11-23 19:17:25,341 - lightrag - INFO - Merged: `XGBoost` | 2+1
+2025-11-23 19:17:25,346 - lightrag - INFO - Merged: `OpenCV` | 2+1
+2025-11-23 19:17:25,348 - lightrag - INFO - Merged: `MLOps` | 1+1
+2025-11-23 19:17:25,582 - lightrag - INFO - Phase 2: Processing 17 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7 (async: 8)
+2025-11-23 19:17:26,644 - lightrag - INFO - Phase 3: Updating final 24(19+5) entities and  17 relations from chat_0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:17:26,645 - lightrag - INFO - Completed merging: 19 entities, 5 extra entities, 17 relations
+2025-11-23 19:17:26,660 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:17:26,661 - lightrag - INFO - Completed processing file 1/1: chat://0b91a432-f402-4229-aa7e-baa4cebc81b7
+2025-11-23 19:17:26,662 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:17:35,050 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:20:24,587 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load full_docs with 0 records
+2025-11-23 19:20:24,588 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load text_chunks with 0 records
+2025-11-23 19:20:24,589 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load full_entities with 0 records
+2025-11-23 19:20:24,589 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load full_relations with 0 records
+2025-11-23 19:20:24,590 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load entity_chunks with 0 records
+2025-11-23 19:20:24,590 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load relation_chunks with 0 records
+2025-11-23 19:20:24,648 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:20:24,661 - lightrag - WARNING - [session_9323d139-c927-42d1-930f-459a729e3a0f] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:20:24,664 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:20:24,694 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Ensured B-Tree index on entity_id for session_9323d139-c927-42d1-930f-459a729e3a0f in None
+2025-11-23 19:20:24,702 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:20:24,703 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:20:24,703 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 KV load llm_response_cache with 0 records
+2025-11-23 19:20:24,704 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Process 21852 doc status load doc_status with 0 records
+2025-11-23 19:20:24,704 - lightrag - INFO - Starting deletion process for document chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:24,705 - lightrag - WARNING - Document chat_9323d139-c927-42d1-930f-459a729e3a0f not found
+2025-11-23 19:20:24,705 - lightrag - INFO - Deletion process completed for document: chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:24,707 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:20:24,707 - lightrag - INFO - Extracting stage 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:24,707 - lightrag - INFO - Processing d-id: chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:24,709 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:20:24,838 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:20:28,642 - lightrag - INFO -  == LLM cache == saving: default:extract:d755bea79035749ec51c1d6d6bbcdefd
+2025-11-23 19:20:28,848 - lightrag - INFO -  == LLM cache == saving: default:extract:017da84ef6d314d4c95abe6ff1b22007
+2025-11-23 19:20:28,849 - lightrag - INFO - Chunk 1 of 1 extracted 4 Ent + 3 Rel chunk-53116937d85199016c9ecac9e07ec343
+2025-11-23 19:20:28,850 - lightrag - INFO - Merging stage 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:28,850 - lightrag - INFO - Phase 1: Processing 4 entities from chat_9323d139-c927-42d1-930f-459a729e3a0f (async: 8)
+2025-11-23 19:20:29,201 - lightrag - INFO - Phase 2: Processing 3 relations from chat_9323d139-c927-42d1-930f-459a729e3a0f (async: 8)
+2025-11-23 19:20:29,460 - lightrag - INFO - Phase 3: Updating final 4(4+0) entities and  3 relations from chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:29,460 - lightrag - INFO - Completed merging: 4 entities, 0 extra entities, 3 relations
+2025-11-23 19:20:29,469 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:20:29,470 - lightrag - INFO - Completed processing file 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:29,470 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:20:29,628 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:20:53,472 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:20:53,481 - lightrag - WARNING - [session_9323d139-c927-42d1-930f-459a729e3a0f] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:20:53,491 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:20:53,498 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Ensured B-Tree index on entity_id for session_9323d139-c927-42d1-930f-459a729e3a0f in None
+2025-11-23 19:20:53,526 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:20:53,527 - lightrag - INFO - [session_9323d139-c927-42d1-930f-459a729e3a0f] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:20:53,528 - lightrag - INFO - Starting deletion process for document chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:53,606 - lightrag - INFO - Found 0 affected entities
+2025-11-23 19:20:53,607 - lightrag - INFO - Found 0 affected relations
+2025-11-23 19:20:53,607 - lightrag - INFO - Successfully deleted 1 chunks from storage
+2025-11-23 19:20:53,672 - lightrag - INFO - Successfully deleted 3 relations
+2025-11-23 19:20:53,769 - lightrag - INFO - Successfully deleted 4 entities
+2025-11-23 19:20:53,772 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:20:53,775 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:20:53,775 - lightrag - INFO - Deletion process completed for document: chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:53,777 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:20:53,777 - lightrag - INFO - Extracting stage 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:53,778 - lightrag - INFO - Processing d-id: chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:20:53,779 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:20:54,000 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:21:00,037 - lightrag - INFO -  == LLM cache == saving: default:extract:b15577819e99dc5d30ea1e60d21d5896
+2025-11-23 19:21:00,248 - lightrag - INFO -  == LLM cache == saving: default:extract:1bfb8b1465194357e7ef37567b2ae699
+2025-11-23 19:21:00,249 - lightrag - INFO - Chunk 1 of 1 extracted 5 Ent + 5 Rel chunk-a1df6ba74053f024409d122c74f1e24a
+2025-11-23 19:21:00,250 - lightrag - INFO - Merging stage 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:21:00,250 - lightrag - INFO - Phase 1: Processing 5 entities from chat_9323d139-c927-42d1-930f-459a729e3a0f (async: 8)
+2025-11-23 19:21:00,578 - lightrag - INFO - Phase 2: Processing 5 relations from chat_9323d139-c927-42d1-930f-459a729e3a0f (async: 8)
+2025-11-23 19:21:00,740 - lightrag - INFO - Phase 3: Updating final 5(5+0) entities and  5 relations from chat_9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:21:00,741 - lightrag - INFO - Completed merging: 5 entities, 0 extra entities, 5 relations
+2025-11-23 19:21:00,746 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:21:00,746 - lightrag - INFO - Completed processing file 1/1: chat://9323d139-c927-42d1-930f-459a729e3a0f
+2025-11-23 19:21:00,747 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:21:00,885 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:24:05,946 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load full_docs with 0 records
+2025-11-23 19:24:05,946 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load text_chunks with 0 records
+2025-11-23 19:24:05,947 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load full_entities with 0 records
+2025-11-23 19:24:05,947 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load full_relations with 0 records
+2025-11-23 19:24:05,948 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load entity_chunks with 0 records
+2025-11-23 19:24:05,948 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load relation_chunks with 0 records
+2025-11-23 19:24:06,003 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:24:06,013 - lightrag - WARNING - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:24:06,016 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:24:06,042 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Ensured B-Tree index on entity_id for session_596ddeac-1553-4889-8be6-aaa0d1cbd39b in None
+2025-11-23 19:24:06,051 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:24:06,051 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:24:06,052 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 KV load llm_response_cache with 0 records
+2025-11-23 19:24:06,054 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Process 5040 doc status load doc_status with 0 records
+2025-11-23 19:24:06,055 - lightrag - INFO - Starting deletion process for document chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:06,056 - lightrag - WARNING - Document chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b not found
+2025-11-23 19:24:06,056 - lightrag - INFO - Deletion process completed for document: chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:06,058 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:24:06,059 - lightrag - INFO - Extracting stage 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:06,059 - lightrag - INFO - Processing d-id: chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:06,062 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:24:06,158 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:24:10,687 - lightrag - INFO -  == LLM cache == saving: default:extract:98f10703fe57f997bc4a318fc98fed1a
+2025-11-23 19:24:10,890 - lightrag - INFO -  == LLM cache == saving: default:extract:76a3b498b20dfc670af5fcc323ea439a
+2025-11-23 19:24:10,891 - lightrag - INFO - Chunk 1 of 1 extracted 4 Ent + 3 Rel chunk-ce14cf71bfd3aec6804810f12081d9f1
+2025-11-23 19:24:10,892 - lightrag - INFO - Merging stage 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:10,892 - lightrag - INFO - Phase 1: Processing 4 entities from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b (async: 8)
+2025-11-23 19:24:11,166 - lightrag - INFO - Phase 2: Processing 3 relations from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b (async: 8)
+2025-11-23 19:24:11,413 - lightrag - INFO - Phase 3: Updating final 4(4+0) entities and  3 relations from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:11,414 - lightrag - INFO - Completed merging: 4 entities, 0 extra entities, 3 relations
+2025-11-23 19:24:11,420 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:24:11,420 - lightrag - INFO - Completed processing file 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:11,421 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:24:11,575 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:24:28,654 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:24:28,663 - lightrag - WARNING - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:24:28,678 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:24:28,685 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Ensured B-Tree index on entity_id for session_596ddeac-1553-4889-8be6-aaa0d1cbd39b in None
+2025-11-23 19:24:28,713 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:24:28,714 - lightrag - INFO - [session_596ddeac-1553-4889-8be6-aaa0d1cbd39b] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:24:28,715 - lightrag - INFO - Starting deletion process for document chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:28,803 - lightrag - INFO - Found 0 affected entities
+2025-11-23 19:24:28,804 - lightrag - INFO - Found 0 affected relations
+2025-11-23 19:24:28,805 - lightrag - INFO - Successfully deleted 1 chunks from storage
+2025-11-23 19:24:28,864 - lightrag - INFO - Successfully deleted 3 relations
+2025-11-23 19:24:28,947 - lightrag - INFO - Successfully deleted 4 entities
+2025-11-23 19:24:28,949 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:24:28,951 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:24:28,951 - lightrag - INFO - Deletion process completed for document: chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:28,953 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:24:28,954 - lightrag - INFO - Extracting stage 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:28,954 - lightrag - INFO - Processing d-id: chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:28,955 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:24:29,102 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:24:37,324 - lightrag - INFO -  == LLM cache == saving: default:extract:fc904c1a358c9448a227356ea1b3f054
+2025-11-23 19:24:37,544 - lightrag - INFO -  == LLM cache == saving: default:extract:3f459365927f4df3efddc13910e8fbea
+2025-11-23 19:24:37,545 - lightrag - INFO - Chunk 1 of 1 extracted 5 Ent + 6 Rel chunk-9fb88f61e49567f82b4ba81a4a8867b4
+2025-11-23 19:24:37,545 - lightrag - INFO - Merging stage 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:37,546 - lightrag - INFO - Phase 1: Processing 5 entities from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b (async: 8)
+2025-11-23 19:24:37,825 - lightrag - INFO - Phase 2: Processing 6 relations from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b (async: 8)
+2025-11-23 19:24:38,190 - lightrag - INFO - Phase 3: Updating final 5(5+0) entities and  6 relations from chat_596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:38,190 - lightrag - INFO - Completed merging: 5 entities, 0 extra entities, 6 relations
+2025-11-23 19:24:38,195 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:24:38,195 - lightrag - INFO - Completed processing file 1/1: chat://596ddeac-1553-4889-8be6-aaa0d1cbd39b
+2025-11-23 19:24:38,195 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:24:38,303 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:25:09,380 - lightrag - INFO - Creating LightRAG instance with workspace='session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19' while default workspace is set to 'session_596ddeac-1553-4889-8be6-aaa0d1cbd39b'
+2025-11-23 19:25:09,380 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load full_docs with 0 records
+2025-11-23 19:25:09,381 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load text_chunks with 0 records
+2025-11-23 19:25:09,382 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load full_entities with 0 records
+2025-11-23 19:25:09,382 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load full_relations with 0 records
+2025-11-23 19:25:09,383 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load entity_chunks with 0 records
+2025-11-23 19:25:09,383 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load relation_chunks with 0 records
+2025-11-23 19:25:09,439 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:25:09,450 - lightrag - WARNING - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:25:09,453 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:25:09,480 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Ensured B-Tree index on entity_id for session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 in None
+2025-11-23 19:25:09,490 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:25:09,490 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:25:09,491 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 KV load llm_response_cache with 0 records
+2025-11-23 19:25:09,492 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Process 5040 doc status load doc_status with 0 records
+2025-11-23 19:25:09,494 - lightrag - INFO - Starting deletion process for document chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:09,494 - lightrag - WARNING - Document chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 not found
+2025-11-23 19:25:09,494 - lightrag - INFO - Deletion process completed for document: chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:09,496 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:25:09,497 - lightrag - INFO - Extracting stage 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:09,497 - lightrag - INFO - Processing d-id: chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:09,498 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:25:09,583 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:25:11,979 - lightrag - INFO -  == LLM cache == saving: default:extract:8cf21b8e589765a5d83710dfc1beefc2
+2025-11-23 19:25:12,193 - lightrag - INFO -  == LLM cache == saving: default:extract:e7c33f235adcd4f94f387a80bd54984e
+2025-11-23 19:25:12,194 - lightrag - INFO - Chunk 1 of 1 extracted 2 Ent + 1 Rel chunk-8547e6c0d07e7c0bfb5b0ac181adabb7
+2025-11-23 19:25:12,195 - lightrag - INFO - Merging stage 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:12,195 - lightrag - INFO - Phase 1: Processing 2 entities from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 (async: 8)
+2025-11-23 19:25:12,389 - lightrag - INFO - Phase 2: Processing 1 relations from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 (async: 8)
+2025-11-23 19:25:12,586 - lightrag - INFO - Phase 3: Updating final 2(2+0) entities and  1 relations from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:12,586 - lightrag - INFO - Completed merging: 2 entities, 0 extra entities, 1 relations
+2025-11-23 19:25:12,591 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:25:12,592 - lightrag - INFO - Completed processing file 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:25:12,592 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:25:12,692 - lightrag - INFO - Successfully finalized 12 storages
+2025-11-23 19:26:15,382 - lightrag - INFO - Creating LightRAG instance with workspace='session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19' while default workspace is set to 'session_596ddeac-1553-4889-8be6-aaa0d1cbd39b'
+2025-11-23 19:26:15,438 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Database chunk-entity-relation at bolt://192.168.52.119:7687 not found. Try to create specified database.
+2025-11-23 19:26:15,447 - lightrag - WARNING - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] This Neo4j instance does not support creating databases. Try to use Neo4j Desktop/Enterprise version or DozerDB instead. Fallback to use the default database.
+2025-11-23 19:26:15,462 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Connected to None at bolt://192.168.52.119:7687
+2025-11-23 19:26:15,468 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Ensured B-Tree index on entity_id for session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 in None
+2025-11-23 19:26:15,495 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Found existing index 'entity_id_fulltext_idx' with state: ONLINE
+2025-11-23 19:26:15,496 - lightrag - INFO - [session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19] Full-text index 'entity_id_fulltext_idx' already exists and is online. Skipping recreation.
+2025-11-23 19:26:15,555 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:26:15,556 - lightrag - INFO - Extracting stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19\repka.pdf
+2025-11-23 19:26:15,556 - lightrag - INFO - Processing d-id: repka.pdf
+2025-11-23 19:26:15,557 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2025-11-23 19:26:15,709 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2025-11-23 19:26:45,819 - lightrag - INFO -  == LLM cache == saving: default:extract:b3fd6556c4d144bb365f7f1aee05e5b3
+2025-11-23 19:26:46,047 - lightrag - INFO -  == LLM cache == saving: default:extract:98d5b6a9abeca2fd6bce935796409485
+2025-11-23 19:26:46,048 - lightrag - INFO - Chunk 1 of 1 extracted 8 Ent + 31 Rel chunk-7da5c8097c0a3f400a2f34298aed5359
+2025-11-23 19:26:46,048 - lightrag - INFO - Merging stage 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19\repka.pdf
+2025-11-23 19:26:46,050 - lightrag - INFO - Phase 1: Processing 8 entities from repka.pdf (async: 8)
+2025-11-23 19:26:46,536 - lightrag - INFO - Phase 2: Processing 21 relations from repka.pdf (async: 8)
+2025-11-23 19:26:47,385 - lightrag - INFO - Phase 3: Updating final 8(8+0) entities and  21 relations from repka.pdf
+2025-11-23 19:26:47,385 - lightrag - INFO - Completed merging: 8 entities, 0 extra entities, 21 relations
+2025-11-23 19:26:47,391 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:26:47,391 - lightrag - INFO - Completed processing file 1/1: D:\__projects__\drop-rag\data\pdf_storage\session_0ea1f2ef-9abe-482d-9635-8da5aaf97a19\repka.pdf
+2025-11-23 19:26:47,392 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:26:47,393 - lightrag - INFO - Starting deletion process for document chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:47,493 - lightrag - INFO - Found 0 affected entities
+2025-11-23 19:26:47,494 - lightrag - INFO - Found 0 affected relations
+2025-11-23 19:26:47,494 - lightrag - INFO - Successfully deleted 1 chunks from storage
+2025-11-23 19:26:47,536 - lightrag - INFO - Successfully deleted 1 relations
+2025-11-23 19:26:47,594 - lightrag - INFO - Successfully deleted 2 entities
+2025-11-23 19:26:47,599 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:26:47,603 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:26:47,604 - lightrag - INFO - Deletion process completed for document: chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:47,606 - lightrag - INFO - Processing 1 document(s)
+2025-11-23 19:26:47,606 - lightrag - INFO - Extracting stage 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:47,606 - lightrag - INFO - Processing d-id: chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:51,500 - lightrag - INFO -  == LLM cache == saving: default:extract:7c8682a488654ed8258946bd54afc2c9
+2025-11-23 19:26:52,456 - lightrag - INFO -  == LLM cache == saving: default:extract:acfbd1c2d94c166afcc21a00767f56c9
+2025-11-23 19:26:52,457 - lightrag - INFO - Chunk 1 of 1 extracted 4 Ent + 2 Rel chunk-1e19a704d8cb08774a08ffd8c2bc9cba
+2025-11-23 19:26:52,490 - lightrag - INFO - Merging stage 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:52,491 - lightrag - INFO - Phase 1: Processing 4 entities from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 (async: 8)
+2025-11-23 19:26:52,497 - lightrag - INFO - Merged: `Репка` | 1+1
+2025-11-23 19:26:52,708 - lightrag - INFO - Phase 2: Processing 2 relations from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19 (async: 8)
+2025-11-23 19:26:52,788 - lightrag - INFO - Phase 3: Updating final 4(4+0) entities and  2 relations from chat_0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:52,789 - lightrag - INFO - Completed merging: 4 entities, 0 extra entities, 2 relations
+2025-11-23 19:26:52,796 - lightrag - INFO - In memory DB persist to disk
+2025-11-23 19:26:52,796 - lightrag - INFO - Completed processing file 1/1: chat://0ea1f2ef-9abe-482d-9635-8da5aaf97a19
+2025-11-23 19:26:52,796 - lightrag - INFO - Enqueued document processing pipeline stopped
+2025-11-23 19:26:53,351 - lightrag - INFO - Successfully finalized 12 storages
