@@ -31,6 +31,11 @@ class Settings:
 
     rag_scope: str  # "session" or "global"
 
+    # LightRAG settings
+    lightrag_working_dir: Path
+    lightrag_graph_max_nodes: int  # Максимальное кол-во узлов для визуализации
+    lightrag_graph_max_edges: int  # Максимальное кол-во рёбер для визуализации
+
     @property
     def is_session_scope(self) -> bool:
         return self.rag_scope.lower() == "session"
@@ -49,6 +54,7 @@ def _ensure_directories(settings: Settings) -> None:
     """
     settings.chroma_db_path.mkdir(parents=True, exist_ok=True)
     settings.pdf_storage_root.mkdir(parents=True, exist_ok=True)
+    settings.lightrag_working_dir.mkdir(parents=True, exist_ok=True)
     # Subfolders for clarity; actual usage depends on RAG scope.
     (settings.pdf_storage_root / "global").mkdir(parents=True, exist_ok=True)
 
@@ -98,6 +104,13 @@ def get_settings() -> Settings:
 
     rag_scope = os.getenv("RAG_SCOPE", "session")
 
+    # LightRAG settings
+    lightrag_working_dir = Path(
+        os.getenv("LIGHTRAG_WORKING_DIR", "./data/lightrag_storage")
+    ).resolve()
+    lightrag_graph_max_nodes = int(os.getenv("LIGHTRAG_GRAPH_MAX_NODES", "300"))
+    lightrag_graph_max_edges = int(os.getenv("LIGHTRAG_GRAPH_MAX_EDGES", "500"))
+
     _settings = Settings(
         llm_base_url=llm_base_url,
         llm_api_key=llm_api_key,
@@ -111,6 +124,9 @@ def get_settings() -> Settings:
         neo4j_password=neo4j_password,
         pdf_storage_root=pdf_storage_root,
         rag_scope=rag_scope,
+        lightrag_working_dir=lightrag_working_dir,
+        lightrag_graph_max_nodes=lightrag_graph_max_nodes,
+        lightrag_graph_max_edges=lightrag_graph_max_edges,
     )
 
     _ensure_directories(_settings)

@@ -64,8 +64,16 @@ LLM_MAX_OUTPUT_TOKENS=2048
 GRAPH_BACKEND=lightrag      # LightRAG
 # GRAPH_BACKEND=simple      # старый режим, если нужно откатиться
 
+# ─────────────────────────────────────────────────────────────────
+# LightRAG settings
+# ─────────────────────────────────────────────────────────────────
+
 # Рабочая директория LightRAG (по умолчанию data/lightrag_storage):
-# LIGHTRAG_WORKING_DIR=./data/lightrag_storage
+LIGHTRAG_WORKING_DIR=./data/lightrag_storage
+
+# Лимиты на визуализацию графа (для больших документов):
+LIGHTRAG_GRAPH_MAX_NODES=300   # макс. узлов для отображения
+LIGHTRAG_GRAPH_MAX_EDGES=500   # макс. рёбер для отображения
 
 # Язык описаний сущностей/связей в LightRAG:
 SUMMARY_LANGUAGE=Russian    # или, если хотите, "Русский"
@@ -151,7 +159,10 @@ LLM_API_KEY=dummy
 LLM_MODEL_NAME=qwen-4b-instruct
 
 EMBEDDER_MODEL_PATH=./models/bge-m3
-EMBEDDER_DEVICE=cpu          # или cuda:0, если используете GPU и передаёте её в контейнер
+# сначала можно проверить на CPU:
+# EMBEDDER_DEVICE=cpu
+# потом, когда убедишься, что torch с CUDA норм, поменять на:
+EMBEDDER_DEVICE=cuda:0
 
 CHROMA_DB_PATH=./data/chroma_db
 
@@ -164,14 +175,17 @@ RAG_SCOPE=session
 
 LLM_MAX_OUTPUT_TOKENS=2048
 
-# Бекенд для графа в UI
-GRAPH_BACKEND=lightrag
+# Выбор бекенда графа для UI:
+GRAPH_BACKEND=lightrag      # LightRAG
+# GRAPH_BACKEND=simple      # старый режим, если нужно откатиться
 
-# Рабочая директория LightRAG
-LIGHTRAG_WORKING_DIR=./data/lightrag_storage
+# Рабочая директория LightRAG (по умолчанию data/lightrag_storage):
+# LIGHTRAG_WORKING_DIR=./data/lightrag_storage
+LIGHTRAG_GRAPH_MAX_NODES=300
+LIGHTRAG_GRAPH_MAX_EDGES=500
 
-# Язык описаний сущностей/связей в LightRAG
-SUMMARY_LANGUAGE=Russian
+# Язык описаний сущностей/связей в LightRAG:
+SUMMARY_LANGUAGE=Russian    # или, если хотите, "Русский"
 ```
 
 При запуске контейнера удобно использовать `--env-file .env`, чтобы не копировать файл внутрь образа.
@@ -298,7 +312,7 @@ EMBEDDER_DEVICE=cuda:0
 
 ```bash
 cd D:/__projects__/drop-rag
-docker compose up --build
+docker-compose up --build -d
 ```
 
 При этом:

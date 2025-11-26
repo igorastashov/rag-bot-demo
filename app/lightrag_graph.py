@@ -6,7 +6,7 @@ import os
 import sys
 import threading
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .config import get_settings
 from .session_manager import get_session
@@ -18,6 +18,12 @@ from .llm_client import chat as app_llm_chat
 
 logger = logging.getLogger(__name__)
 _settings = get_settings()
+
+# Глобальная блокировка, чтобы не запускать два построения графа параллельно
+_build_lock = threading.Lock()
+
+# Хранилище для результатов фоновых задач построения графа
+_graph_build_tasks: Dict[str, Dict[str, Any]] = {}
 
 # Подключаем локальную копию LightRAG из sample_prj/LightRAG
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -109,12 +115,8 @@ async def _build_lightrag_graph_for_session_async(
     # Настраиваем логгер LightRAG
     setup_lightrag_logger("lightrag", level="INFO")
 
-    # Определяем рабочую директорию LightRAG (можно переопределить через LIGHTRAG_WORKING_DIR)
-    default_working_dir = PROJECT_ROOT / "data" / "lightrag_storage"
-    working_dir_env = os.getenv("LIGHTRAG_WORKING_DIR")
-    working_dir = (
-        Path(working_dir_env).resolve() if working_dir_env else default_working_dir
-    )
+    # Рабочая директория LightRAG из конфига
+    working_dir = _settings.lightrag_working_dir
 
     logger.info("Using LightRAG working_dir=%s", working_dir)
 
@@ -192,37 +194,84 @@ async def _build_lightrag_graph_for_session_async(
                 file_paths=[f"chat://{session_id}"],
             )
 
-        # 3) Собираем узлы и рёбра из графа LightRAG
-        nodes: List[dict] = []
-        edges: List[dict] = []
-
+        # 3) Собираем узлы и рёбра из графа LightRAG (оптимизированно)
         graph = rag.chunk_entity_relation_graph
-        all_entities = await graph.get_all_labels()
-        logger.info("LightRAG graph entities count: %d", len(all_entities))
 
-        for entity_name in all_entities:
+        # Получаем все рёбра одним запросом к Neo4j (вместо O(N²) итераций)
+        all_edges_data = await graph.get_all_edges()
+        logger.info("LightRAG graph total edges: %d", len(all_edges_data))
+
+        # Собираем уникальные узлы из рёбер + все метки
+        all_entities = await graph.get_all_labels()
+        logger.info("LightRAG graph total entities: %d", len(all_entities))
+
+        # Лимиты из конфига для визуализации
+        max_nodes = _settings.lightrag_graph_max_nodes
+        max_edges = _settings.lightrag_graph_max_edges
+
+        # Если узлов слишком много — берём только самые связанные
+        if len(all_entities) > max_nodes:
+            # Считаем степень каждого узла (количество связей)
+            node_degree: dict[str, int] = {}
+            for edge_data in all_edges_data:
+                src = edge_data.get("source")
+                tgt = edge_data.get("target")
+                if src:
+                    node_degree[src] = node_degree.get(src, 0) + 1
+                if tgt:
+                    node_degree[tgt] = node_degree.get(tgt, 0) + 1
+
+            # Сортируем по степени (убывание) и берём топ-N
+            sorted_entities = sorted(
+                all_entities,
+                key=lambda e: node_degree.get(e, 0),
+                reverse=True,
+            )
+            selected_entities = set(sorted_entities[:max_nodes])
+            logger.info(
+                "Limiting graph to top %d nodes (by degree) out of %d",
+                max_nodes,
+                len(all_entities),
+            )
+        else:
+            selected_entities = set(all_entities)
+
+        # Собираем узлы
+        nodes: List[dict] = []
+        for entity_name in selected_entities:
             node_data = await graph.get_node(entity_name) or {}
             label = node_data.get("description") or entity_name
             nodes.append({"id": entity_name, "label": label})
 
-        for src in all_entities:
-            for tgt in all_entities:
-                if src == tgt:
-                    continue
-                if not await graph.has_edge(src, tgt):
-                    continue
-                edge_data = await graph.get_edge(src, tgt) or {}
-                rel_type = edge_data.get("description") or edge_data.get("keywords") or ""
-                edges.append(
-                    {
-                        "source": src,
-                        "target": tgt,
-                        "type": rel_type,
-                    }
+        # Собираем рёбра (только между выбранными узлами)
+        edges: List[dict] = []
+        for edge_data in all_edges_data:
+            src = edge_data.get("source")
+            tgt = edge_data.get("target")
+            if not src or not tgt:
+                continue
+            # Пропускаем рёбра, если узлы не в выборке
+            if src not in selected_entities or tgt not in selected_entities:
+                continue
+            rel_type = edge_data.get("description") or edge_data.get("keywords") or ""
+            edges.append({
+                "source": src,
+                "target": tgt,
+                "type": rel_type,
+            })
+            # Лимит на количество рёбер
+            if len(edges) >= max_edges:
+                logger.info(
+                    "Limiting graph to %d edges out of %d",
+                    max_edges,
+                    len(all_edges_data),
                 )
+                break
 
         logger.info(
-            "LightRAG graph built: %d node(s), %d edge(s)", len(nodes), len(edges)
+            "LightRAG graph for visualization: %d node(s), %d edge(s)",
+            len(nodes),
+            len(edges),
         )
 
         if not nodes:
@@ -235,10 +284,21 @@ async def _build_lightrag_graph_for_session_async(
         # 3) Генерируем HTML через уже существующий pyvis‑билдер
         graph_html = _build_pyvis_html(nodes, edges)
 
-        summary = (
-            "Граф знаний построен.\n"
-            f"Сущностей: {len(nodes)}, связей: {len(edges)}."
-        )
+        # Формируем summary с информацией о лимитах
+        total_entities = len(all_entities)
+        total_edges = len(all_edges_data)
+        if len(nodes) < total_entities or len(edges) < total_edges:
+            summary = (
+                f"Граф знаний построен.\n"
+                f"Всего сущностей: {total_entities}, связей: {total_edges}.\n"
+                f"Отображено: {len(nodes)} сущностей, {len(edges)} связей "
+                f"(лимит: {max_nodes}/{max_edges})."
+            )
+        else:
+            summary = (
+                "Граф знаний построен.\n"
+                f"Сущностей: {len(nodes)}, связей: {len(edges)}."
+            )
         return summary, graph_html
 
     finally:
@@ -253,37 +313,173 @@ def build_lightrag_graph_for_session(
 
     Запускает асинхронную логику в отдельном потоке, чтобы избежать
     конфликтов с уже работающим event loop (например, внутри Streamlit).
+
+    Использует глобальную блокировку _build_lock, чтобы предотвратить
+    параллельные запуски построения графа (например, при повторном клике).
     """
-    result: List[Tuple[str, Optional[str]]] = []
-    error: List[BaseException] = []
+    # Пытаемся захватить блокировку без ожидания
+    if not _build_lock.acquire(blocking=False):
+        logger.warning(
+            "Graph build already in progress for another request, skipping."
+        )
+        return (
+            "⏳ Граф уже строится. Пожалуйста, дождитесь завершения предыдущего запроса.",
+            None,
+        )
+
+    try:
+        result: List[Tuple[str, Optional[str]]] = []
+        error: List[BaseException] = []
+
+        def _worker() -> None:
+            try:
+                res = asyncio.run(_build_lightrag_graph_for_session_async(session_id))
+                result.append(res)
+            except BaseException as e:  # pragma: no cover - пробрасываем наверх
+                error.append(e)
+
+        thread = threading.Thread(
+            target=_worker,
+            name=f"lightrag-graph-{session_id}",
+            daemon=True,
+        )
+        thread.start()
+        thread.join()
+
+        if error:
+            raise error[0]
+        if not result:
+            # Защитный fallback, не должен срабатывать в нормальном сценарии
+            return (
+                "Не удалось построить граф (внутренняя ошибка при построении графа).",
+                None,
+            )
+        return result[0]
+    finally:
+        _build_lock.release()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Неблокирующий API для Streamlit (фоновое построение графа)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def start_graph_build_async(session_id: str) -> bool:
+    """
+    Запускает построение графа в фоновом потоке (неблокирующий вызов).
+
+    Возвращает True, если задача успешно запущена.
+    Возвращает False, если построение уже выполняется для этой сессии.
+    """
+    # Проверяем, не запущена ли уже задача для этой сессии
+    if session_id in _graph_build_tasks:
+        task = _graph_build_tasks[session_id]
+        thread = task.get("thread")
+        if thread and thread.is_alive():
+            logger.warning(
+                "Graph build already running for session %s, skipping.",
+                session_id,
+            )
+            return False
+
+    # Пытаемся захватить глобальную блокировку
+    if not _build_lock.acquire(blocking=False):
+        logger.warning(
+            "Graph build lock is held by another session, cannot start for %s.",
+            session_id,
+        )
+        return False
 
     def _worker() -> None:
         try:
             res = asyncio.run(_build_lightrag_graph_for_session_async(session_id))
-            result.append(res)
-        except BaseException as e:  # pragma: no cover - пробрасываем наверх
-            error.append(e)
+            _graph_build_tasks[session_id] = {
+                "result": res,
+                "error": None,
+                "done": True,
+                "thread": None,
+            }
+            logger.info("Graph build completed for session %s", session_id)
+        except Exception as e:
+            logger.exception("Graph build failed for session %s: %s", session_id, e)
+            _graph_build_tasks[session_id] = {
+                "result": None,
+                "error": str(e),
+                "done": True,
+                "thread": None,
+            }
+        finally:
+            _build_lock.release()
 
     thread = threading.Thread(
         target=_worker,
-        name=f"lightrag-graph-{session_id}",
+        name=f"lightrag-graph-async-{session_id}",
         daemon=True,
     )
+
+    _graph_build_tasks[session_id] = {
+        "thread": thread,
+        "done": False,
+        "result": None,
+        "error": None,
+    }
+
     thread.start()
-    thread.join()
+    logger.info("Started async graph build for session %s", session_id)
+    return True
+
+
+def get_graph_build_status(session_id: str) -> Tuple[bool, Optional[str], Optional[str]]:
+    """
+    Проверяет статус построения графа для указанной сессии.
+
+    Возвращает кортеж (is_done, summary_text, graph_html):
+      - is_done=False: задача ещё выполняется (или не запущена)
+      - is_done=True: задача завершена, результат в summary_text и graph_html
+        (если была ошибка, summary_text содержит сообщение об ошибке, graph_html=None)
+
+    После получения результата (is_done=True) задача удаляется из хранилища.
+    """
+    if session_id not in _graph_build_tasks:
+        return (False, None, None)
+
+    task = _graph_build_tasks[session_id]
+
+    if not task.get("done"):
+        # Задача ещё выполняется
+        return (False, None, None)
+
+    # Задача завершена — забираем результат и очищаем
+    result = task.get("result")
+    error = task.get("error")
+    del _graph_build_tasks[session_id]
 
     if error:
-        raise error[0]
-    if not result:
-        # Защитный fallback, не должен срабатывать в нормальном сценарии
-        return (
-            "Не удалось построить граф (внутренняя ошибка при построении графа).",
-            None,
-        )
-    return result[0]
+        return (True, f"❌ Ошибка при построении графа: {error}", None)
+
+    if result:
+        summary_text, graph_html = result
+        return (True, summary_text, graph_html)
+
+    return (True, "Не удалось построить граф (неизвестная ошибка).", None)
 
 
-__all__ = ["build_lightrag_graph_for_session"]
+def is_graph_building(session_id: str) -> bool:
+    """
+    Проверяет, выполняется ли сейчас построение графа для указанной сессии.
+    """
+    if session_id not in _graph_build_tasks:
+        return False
+    task = _graph_build_tasks[session_id]
+    return not task.get("done", True)
+
+
+__all__ = [
+    "build_lightrag_graph_for_session",
+    "start_graph_build_async",
+    "get_graph_build_status",
+    "is_graph_building",
+]
 
 
 

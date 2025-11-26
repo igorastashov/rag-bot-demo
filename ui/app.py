@@ -18,13 +18,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+import time
+
 from app.config import get_settings
 from app.pdf_ingestion import ingest_uploaded_pdfs
 from app.rag_pipeline import answer_question
 from app.session_manager import create_session, get_session
 from app.vector_store import get_collection
 from app.graph_store import build_graph_for_session
-from app.lightrag_graph import build_lightrag_graph_for_session
+from app.lightrag_graph import (
+    start_graph_build_async,
+    get_graph_build_status,
+    is_graph_building,
+)
 
 
 settings = get_settings()
@@ -128,26 +134,70 @@ if user_input := st.chat_input("Задайте вопрос..."):
 st.markdown("---")
 st.subheader("3. Граф знаний")
 
-if st.button("Построить/обновить граф знаний по текущей сессии"):
-    session_state = get_session(session_id)
-    summary_text: str = ""
-    graph_html = None
+# ─────────────────────────────────────────────────────────────────────────────
+# Неблокирующее построение графа для LightRAG
+# ─────────────────────────────────────────────────────────────────────────────
 
-    if USE_LIGHTRAG_GRAPH:
-        # Режим RAG-графа (LightRAG): строим граф на основе диалога и PDF (если есть)
+if USE_LIGHTRAG_GRAPH:
+    # Проверяем, есть ли готовый результат от фонового построения
+    is_done, summary_text, graph_html = get_graph_build_status(session_id)
+
+    if is_done and summary_text:
+        # Результат готов — показываем граф
+        with st.chat_message("assistant"):
+            st.markdown(summary_text)
+            if graph_html:
+                components.html(graph_html, height=600)
+
+        # Сохраняем в историю чата
+        st.session_state["chat_history"].append(
+            {
+                "role": "assistant",
+                "content": summary_text,
+                "graph_html": graph_html,
+            }
+        )
+
+    # Проверяем, выполняется ли сейчас построение
+    graph_is_building = is_graph_building(session_id)
+
+    if graph_is_building:
+        st.info("⏳ Граф знаний строится в фоне... Можете продолжать работу с чатом.")
+        # Автоматически обновляем страницу каждые 3 секунды для проверки статуса
+        time.sleep(3)
+        st.rerun()
+
+    # Кнопка неактивна, пока граф строится
+    if st.button(
+        "Построить/обновить граф знаний по текущей сессии",
+        disabled=graph_is_building,
+    ):
+        session_state = get_session(session_id)
+
         if not session_state.messages and not session_state.attached_pdfs:
             st.warning(
                 "Недостаточно данных для построения графа. "
                 "Добавьте сообщения в чат или загрузите документы."
             )
-            summary_text, graph_html = "", None
         else:
-            with st.spinner("Строю граф знаний ..."):
-                summary_text, graph_html = build_lightrag_graph_for_session(
-                    session_id=session_id,
-                )
-    else:
-        # Базовый режим: используем LLM‑JSON + чанки из Chroma
+            # Запускаем построение в фоне
+            if start_graph_build_async(session_id):
+                st.info("🚀 Построение графа запущено в фоне...")
+                time.sleep(1)
+                st.rerun()
+            else:
+                st.warning("Граф уже строится. Пожалуйста, подождите.")
+
+else:
+    # ─────────────────────────────────────────────────────────────────────────
+    # Базовый режим (Simple JSON) — синхронное построение
+    # ─────────────────────────────────────────────────────────────────────────
+
+    if st.button("Построить/обновить граф знаний по текущей сессии"):
+        session_state = get_session(session_id)
+        summary_text: str = ""
+        graph_html = None
+
         # Получаем все документы (чанки) из коллекции для текущей сессии
         collection = get_collection(session_id)
         data = collection.get(include=["documents"])
@@ -166,20 +216,20 @@ if st.button("Построить/обновить граф знаний по т�
                     pdf_chunks=pdf_chunks,
                 )
 
-    if summary_text:
-        # Показываем как отдельный ответ ассистента
-        with st.chat_message("assistant"):
-            st.markdown(summary_text)
-            if graph_html:
-                components.html(graph_html, height=600)
+        if summary_text:
+            # Показываем как отдельный ответ ассистента
+            with st.chat_message("assistant"):
+                st.markdown(summary_text)
+                if graph_html:
+                    components.html(graph_html, height=600)
 
-        # Сохраняем в историю чата, чтобы граф оставался при последующих запросах
-        st.session_state["chat_history"].append(
-            {
-                "role": "assistant",
-                "content": summary_text,
-                "graph_html": graph_html,
-            }
-        )
+            # Сохраняем в историю чата
+            st.session_state["chat_history"].append(
+                {
+                    "role": "assistant",
+                    "content": summary_text,
+                    "graph_html": graph_html,
+                }
+            )
 
 
