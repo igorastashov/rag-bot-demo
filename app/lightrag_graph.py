@@ -25,6 +25,61 @@ _build_lock = threading.Lock()
 # Хранилище для результатов фоновых задач построения графа
 _graph_build_tasks: Dict[str, Dict[str, Any]] = {}
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Глобальный event loop для LightRAG (решает проблему "Lock bound to different loop")
+# ─────────────────────────────────────────────────────────────────────────────
+
+_lightrag_loop: Optional[asyncio.AbstractEventLoop] = None
+_lightrag_loop_lock = threading.Lock()
+
+
+def _get_or_create_lightrag_loop() -> asyncio.AbstractEventLoop:
+    """
+    Возвращает глобальный event loop для LightRAG.
+    Loop создаётся один раз и работает в отдельном фоновом потоке.
+
+    Это гарантирует, что все asyncio.Lock внутри LightRAG будут привязаны
+    к одному и тому же event loop, даже при повторных вызовах построения графа.
+    """
+    global _lightrag_loop
+
+    with _lightrag_loop_lock:
+        if _lightrag_loop is not None and _lightrag_loop.is_running():
+            return _lightrag_loop
+
+        # Создаём новый loop
+        _lightrag_loop = asyncio.new_event_loop()
+
+        def _run_loop_forever():
+            asyncio.set_event_loop(_lightrag_loop)
+            _lightrag_loop.run_forever()
+
+        loop_thread = threading.Thread(
+            target=_run_loop_forever,
+            name="lightrag-event-loop",
+            daemon=True,
+        )
+        loop_thread.start()
+
+        # Даём loop немного времени на старт
+        import time
+        time.sleep(0.1)
+
+        logger.info("Created global LightRAG event loop in thread %s", loop_thread.name)
+        return _lightrag_loop
+
+
+def _run_in_lightrag_loop(coro) -> Any:
+    """
+    Запускает корутину в глобальном LightRAG event loop и блокирующе ждёт результата.
+
+    Это позволяет переиспользовать один и тот же event loop для всех вызовов LightRAG,
+    избегая ошибки "asyncio.Lock is bound to a different event loop".
+    """
+    loop = _get_or_create_lightrag_loop()
+    future = asyncio.run_coroutine_threadsafe(coro, loop)
+    return future.result()  # Блокирующее ожидание результата
+
 # Подключаем локальную копию LightRAG из sample_prj/LightRAG
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
@@ -328,33 +383,15 @@ def build_lightrag_graph_for_session(
         )
 
     try:
-        result: List[Tuple[str, Optional[str]]] = []
-        error: List[BaseException] = []
-
-        def _worker() -> None:
-            try:
-                res = asyncio.run(_build_lightrag_graph_for_session_async(session_id))
-                result.append(res)
-            except BaseException as e:  # pragma: no cover - пробрасываем наверх
-                error.append(e)
-
-        thread = threading.Thread(
-            target=_worker,
-            name=f"lightrag-graph-{session_id}",
-            daemon=True,
+        # Используем глобальный event loop для LightRAG
+        # (избегаем ошибки "Lock bound to different event loop")
+        result = _run_in_lightrag_loop(
+            _build_lightrag_graph_for_session_async(session_id)
         )
-        thread.start()
-        thread.join()
-
-        if error:
-            raise error[0]
-        if not result:
-            # Защитный fallback, не должен срабатывать в нормальном сценарии
-            return (
-                "Не удалось построить граф (внутренняя ошибка при построении графа).",
-                None,
-            )
-        return result[0]
+        return result
+    except Exception as e:
+        logger.exception("Graph build failed for session %s: %s", session_id, e)
+        return (f"❌ Ошибка при построении графа: {e}", None)
     finally:
         _build_lock.release()
 
@@ -392,7 +429,11 @@ def start_graph_build_async(session_id: str) -> bool:
 
     def _worker() -> None:
         try:
-            res = asyncio.run(_build_lightrag_graph_for_session_async(session_id))
+            # Используем глобальный event loop для LightRAG
+            # (избегаем ошибки "Lock bound to different event loop")
+            res = _run_in_lightrag_loop(
+                _build_lightrag_graph_for_session_async(session_id)
+            )
             _graph_build_tasks[session_id] = {
                 "result": res,
                 "error": None,

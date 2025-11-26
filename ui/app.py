@@ -36,8 +36,8 @@ from app.lightrag_graph import (
 settings = get_settings()
 USE_LIGHTRAG_GRAPH = os.getenv("GRAPH_BACKEND", "simple").lower() == "lightrag"
 
-st.set_page_config(page_title="Анализ документов. Выявление сущностей и свзяей.", layout="wide")
-st.title("Анализ документов. Выявление сущностей и свзяей.")
+st.set_page_config(page_title="Анализ документов. Выявление сущностей и связей.", layout="wide")
+st.title("Анализ документов. Выявление сущностей и связей.")
 
 
 if "session_id" not in st.session_state:
